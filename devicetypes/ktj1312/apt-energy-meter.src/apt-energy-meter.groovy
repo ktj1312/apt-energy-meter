@@ -15,7 +15,7 @@ metadata {
 //        attribute "lastCheckin", "Date"
 
         command "refresh"
-        command "pollEnergyInfo"
+//        command "pollEnergyInfo"
     }
 
     simulator {
@@ -106,26 +106,26 @@ def updated() {
 def refresh() {
     log.debug "refresh()"
 
-    pollEnergyInfo()
+//    pollEnergyInfo()
 }
 
 def configure() {
     log.debug "Configuare()"
 }
 
-def pollEnergyInfo() {
+//def pollEnergyInfo() {
+//
+//    if (userId && address && phoneuid) {
+//        log.debug "pollGas()"
+//        pullGas()
+//
+//        sendEvent(name: "lastCheckin", value: new Date().format("yyyy MMM dd EEE h:mm:ss a", location.timeZone))
+//    }
+//    else log.error "Missing settings userId or address or phoneuid"
+//}
 
-    if (userId && address && phoneuid) {
-        log.debug "pollGas()"
-        pullGas()
-
-        sendEvent(name: "lastCheckin", value: new Date().format("yyyy MMM dd EEE h:mm:ss a", location.timeZone))
-    }
-    else log.error "Missing settings userId or address or phoneuid"
-}
-
-def pollGas() {
-    log.debug "pollGas()"
+//def pollGas() {
+//    log.debug "pollGas()"
 
 //    def params = getRequestParam("gas")
 //
@@ -142,37 +142,37 @@ def pollGas() {
 //    } catch (e) {
 //        log.error "failed to update $e"
 //    }
-}
+//}
 
-private getMonth(){
-    java.util.Date date= new Date();
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    return cal.get(Calendar.MONTH);
-}
-
-private getRequestParam(type){
-
-    Date date = new Date()
-    SimpleDateFormat df = new SimpleDateFormat("yyyy")
-    year = df.format(date)
-
-    def params = [
-            "uri" : "http://" + host + "/WizRemoteState/WizSmart_for_Web_ISAPI.dll/datasnap/rest/TsmWizSmart/spGetHistoryEnergyUsage"
-    ]
-
-    if(type.equals("gas")){
-        params.uri += "/G/Monthly/" + year + "/10/7/17"
-    }else if(type.equals("water")){
-        params.uri += "/W/Monthly/" + year + "/10/7/17"
-    }else if(type.equals("energy")){
-        params.uri += "/E/Monthly/" + year + "/10/7/17"
-    }else{
-        log.error "undefined energy type " + type + " has been requested"
-    }
-
-    return params
-}
+//private getMonth(){
+//    java.util.Date date= new Date();
+//    Calendar cal = Calendar.getInstance();
+//    cal.setTime(date);
+//    return cal.get(Calendar.MONTH);
+//}
+//
+//private getRequestParam(type){
+//
+//    Date date = new Date()
+//    SimpleDateFormat df = new SimpleDateFormat("yyyy")
+//    year = df.format(date)
+//
+//    def params = [
+//            "uri" : "http://" + host + "/WizRemoteState/WizSmart_for_Web_ISAPI.dll/datasnap/rest/TsmWizSmart/spGetHistoryEnergyUsage"
+//    ]
+//
+//    if(type.equals("gas")){
+//        params.uri += "/G/Monthly/" + year + "/10/7/17"
+//    }else if(type.equals("water")){
+//        params.uri += "/W/Monthly/" + year + "/10/7/17"
+//    }else if(type.equals("energy")){
+//        params.uri += "/E/Monthly/" + year + "/10/7/17"
+//    }else{
+//        log.error "undefined energy type " + type + " has been requested"
+//    }
+//
+//    return params
+//}
 
 private getHttpGetJson(param) {
     log.debug "getHttpGetJson>> params : ${param}"
@@ -190,9 +190,9 @@ private getHttpGetJson(param) {
 
 }
 
-private cal_gas_fare(gas){
-
-    def sum = 0
-
-    return sum
-}
+//private cal_gas_fare(gas){
+//
+//    def sum = 0
+//
+//    return sum
+//}
