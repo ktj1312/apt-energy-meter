@@ -15,7 +15,7 @@ metadata {
 //        attribute "lastCheckin", "Date"
 
         command "refresh"
-//        command "pollEnergyInfo"
+        command "pollEnergyInfo"
     }
 
     simulator {
@@ -29,9 +29,9 @@ metadata {
         input type: "paragraph", element: "paragraph", title: "Version", description: version(), displayDuringSetup: false
     }
 
-    tiles {
+    tiles(scale:2) {
         valueTile("view", "view", decoration: "flat") {
-            state "view", label:'${currentValue} W', icon:'st.Entertainment.entertainment15'
+            state "view", label:'${currentValue} kWh', icon:'st.Entertainment.entertainment15'
         }
 
         multiAttributeTile(name:"energy_month", type: "generic", width: 6, height: 4) {
@@ -50,32 +50,33 @@ metadata {
                 attributeState("default", label:'Last Update: ${currentValue}', icon: "st.Health & Wellness.health9")
             }
         }
-//        valueTile("energy", "device.energy", width: 2, height : 2, decoration: "flat") {
-//            state "energy", label:'${currentValue}'
-//        }
-//        valueTile("energy_fare", "device.energy_fare", width: 2, height : 2, decoration: "flat") {
-//            state "energy_fare", label:'${currentValue}\n원'
-//        }
-//
-//        valueTile("gas", "device.gas", width: 2, height : 2, decoration: "flat") {
-//            state "gas", label:'${currentValue}'
-//        }
-//        valueTile("gas_fare", "device.gas_fare", width: 2, height : 2, decoration: "flat") {
-//            state "gas_fare", label:'${currentValue}\n원'
-//        }
-//
-//        valueTile("water", "device.water", width: 2, height : 2, decoration: "flat") {
-//            state "water", label:'${currentValue}'
-//        }
-//        valueTile("water_fare", "device.water_fare", width: 2, height : 2, decoration: "flat") {
-//            state "water_fare", label:'${currentValue}\n원'
-//        }
-//
-//        valueTile("refresh", "device.refresh", width: 2, height : 2, decoration: "flat") {
-//            state "refresh", label:'REFRESH', action: 'refresh.refresh'
-//        }
-//
+        valueTile("energy", "device.energy", width: 2, height : 2, decoration: "flat") {
+            state "energy", label:'${currentValue}'
+        }
+        valueTile("energy_fare", "device.energy_fare", width: 2, height : 2, decoration: "flat") {
+            state "energy_fare", label:'${currentValue}\n원'
+        }
+
+        valueTile("gas", "device.gas", width: 2, height : 2, decoration: "flat") {
+            state "gas", label:'${currentValue}'
+        }
+        valueTile("gas_fare", "device.gas_fare", width: 2, height : 2, decoration: "flat") {
+            state "gas_fare", label:'${currentValue}\n원'
+        }
+
+        valueTile("water", "device.water", width: 2, height : 2, decoration: "flat") {
+            state "water", label:'${currentValue}'
+        }
+        valueTile("water_fare", "device.water_fare", width: 2, height : 2, decoration: "flat") {
+            state "water_fare", label:'${currentValue}\n원'
+        }
+
+        valueTile("refresh", "device.refresh", width: 2, height : 2, decoration: "flat") {
+            state "refresh", label:'REFRESH', action: 'refresh.refresh'
+        }
+
         main (["view"])
+        details (["energy_month","energy", "gas", "water", "energy_fare", "gas_fare", "water_fare", "refresh"])
     }
 }
 
@@ -106,73 +107,119 @@ def updated() {
 def refresh() {
     log.debug "refresh()"
 
-//    pollEnergyInfo()
+    pollEnergyInfo()
 }
 
 def configure() {
     log.debug "Configuare()"
 }
 
-//def pollEnergyInfo() {
-//
-//    if (userId && address && phoneuid) {
-//        log.debug "pollGas()"
-//        pullGas()
-//
-//        sendEvent(name: "lastCheckin", value: new Date().format("yyyy MMM dd EEE h:mm:ss a", location.timeZone))
-//    }
-//    else log.error "Missing settings userId or address or phoneuid"
-//}
+def pollEnergyInfo() {
 
-//def pollGas() {
-//    log.debug "pollGas()"
+    if (userid && address && phoneuid && host) {
+        pollGas()
+        pollWater()
+        pollEnergy()
 
-//    def params = getRequestParam("gas")
-//
-//    try {
-//        log.debug "request >> ${params}"
-//
-//        def respMap = getHttpGetJson(params)
-//
-//        gasQty = respMap.result[0].myhome[getMonth()]
-//        fare = cal_gas_fare(gasQty)
-//        sendEvent(name: "gas", value: gasQty)
-//        sendEvent(name: "gas_fare", value: fare)
-//
-//    } catch (e) {
-//        log.error "failed to update $e"
-//    }
-//}
+        sendEvent(name: "lastCheckin", value: new Date().format("yyyy MMM dd EEE h:mm:ss a", location.timeZone))
+    }
+    else log.error "Missing settings host or userId or address or phoneuid"
+}
 
-//private getMonth(){
-//    java.util.Date date= new Date();
-//    Calendar cal = Calendar.getInstance();
-//    cal.setTime(date);
-//    return cal.get(Calendar.MONTH);
-//}
-//
-//private getRequestParam(type){
-//
-//    Date date = new Date()
-//    SimpleDateFormat df = new SimpleDateFormat("yyyy")
-//    year = df.format(date)
-//
-//    def params = [
-//            "uri" : "http://" + host + "/WizRemoteState/WizSmart_for_Web_ISAPI.dll/datasnap/rest/TsmWizSmart/spGetHistoryEnergyUsage"
-//    ]
-//
-//    if(type.equals("gas")){
-//        params.uri += "/G/Monthly/" + year + "/10/7/17"
-//    }else if(type.equals("water")){
-//        params.uri += "/W/Monthly/" + year + "/10/7/17"
-//    }else if(type.equals("energy")){
-//        params.uri += "/E/Monthly/" + year + "/10/7/17"
-//    }else{
-//        log.error "undefined energy type " + type + " has been requested"
-//    }
-//
-//    return params
-//}
+def pollGas() {
+    log.debug "pollGas()"
+
+    def params = getRequestParam("gas")
+
+    try {
+        log.debug "request >> ${params}"
+
+        def respMap = getHttpGetJson(params)
+
+        def usage = respMap.result[0].myhome[getMonth()]
+        def fare = cal_gas_fare(energy)
+
+        sendEvent(name: "gas", value: usage)
+        sendEvent(name: "gas_fare", value: fare)
+
+    } catch (e) {
+        log.error "failed to update $e"
+    }
+}
+
+def pollWater() {
+    log.debug "pollWater()"
+
+    def params = getRequestParam("water")
+
+    try {
+        log.debug "request >> ${params}"
+
+        def respMap = getHttpGetJson(params)
+
+        def usage = respMap.result[0].myhome[getMonth()]
+        def fare = cal_water_fare(energy)
+
+        sendEvent(name: "water", value: usage)
+        sendEvent(name: "water_fare", value: fare)
+
+    } catch (e) {
+        log.error "failed to update $e"
+    }
+}
+
+def pollEnergy() {
+    log.debug "pollEnergy()"
+
+    def params = getRequestParam("energy")
+
+    try {
+        log.debug "request >> ${params}"
+
+        def respMap = getHttpGetJson(params)
+
+        def usage = respMap.result[0].myhome[getMonth()]
+        def fare = cal_energy_fare(energy)
+
+        sendEvent(name: "view", value: usage)
+        sendEvent(name: "energy", value: usage)
+        sendEvent(name: "energy_fare", value: fare)
+
+    } catch (e) {
+        log.error "failed to update $e"
+    }
+}
+
+private getMonth(){
+    java.util.Date date= new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    return cal.get(Calendar.MONTH);
+}
+
+private getRequestParam(type){
+
+    Date date = new Date()
+    def df = new java.text.SimpleDateFormat("yyyy")
+    def year = df.format(date)
+
+    def params = [
+            "uri" : "http://" + host + "/WizRemoteState/WizSmart_for_Web_ISAPI.dll/datasnap/rest/TsmWizSmart/spGetHistoryEnergyUsage/" + userid + "/" + address + "/" + phoneuid,
+            "contentType" : 'application/json'
+    ]
+
+    if(type.equals("gas")){
+        params.uri = params.uri + "/G/Monthly/" + year + "/10/7/17"
+    }else if(type.equals("water")){
+        params.uri = params.uri + "/W/Monthly/" + year + "/10/7/17"
+    }else if(type.equals("energy")){
+        params.uri = params.uri + "/E/Monthly/" + year + "/10/7/17"
+    }else{
+        log.error "undefined energy type " + type + " has been requested"
+    }
+
+    return params
+}
 
 private getHttpGetJson(param) {
     log.debug "getHttpGetJson>> params : ${param}"
@@ -190,9 +237,23 @@ private getHttpGetJson(param) {
 
 }
 
-//private cal_gas_fare(gas){
-//
-//    def sum = 0
-//
-//    return sum
-//}
+private cal_gas_fare(gas){
+
+    def sum = 0
+
+    return sum
+}
+
+private cal_water_fare(water){
+
+    def sum = 0
+
+    return sum
+}
+
+private cal_energy_fare(energy){
+
+    def sum = 0
+
+    return sum
+}
