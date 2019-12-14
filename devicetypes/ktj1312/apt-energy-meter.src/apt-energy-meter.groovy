@@ -127,21 +127,21 @@ def pollEnergyInfo() {
 def pollGas() {
     log.debug "pollGas()"
 
-    def params = getRequestParam("gas")
-
-    try {
-        log.debug "request >> ${params}"
-
-        def respMap = getHttpGetJson(params)
-
-        gasQty = respMap.result[0].myhome[getMonth()]
-        fare = cal_gas_fare(gasQty)
-        sendEvent(name: "gas", value: gasQty)
-        sendEvent(name: "gas_fare", value: fare)
-
-    } catch (e) {
-        log.error "failed to update $e"
-    }
+//    def params = getRequestParam("gas")
+//
+//    try {
+//        log.debug "request >> ${params}"
+//
+//        def respMap = getHttpGetJson(params)
+//
+//        gasQty = respMap.result[0].myhome[getMonth()]
+//        fare = cal_gas_fare(gasQty)
+//        sendEvent(name: "gas", value: gasQty)
+//        sendEvent(name: "gas_fare", value: fare)
+//
+//    } catch (e) {
+//        log.error "failed to update $e"
+//    }
 }
 
 private getMonth(){
