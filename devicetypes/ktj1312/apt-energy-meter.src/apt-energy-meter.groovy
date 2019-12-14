@@ -9,10 +9,10 @@ metadata {
         capability "Energy Meter"
         capability "Refresh"
 
-        attribute "gasUsage", "number"
-        attribute "waterUsage", "number"
-        attribute "powerUsage", "number"
-        attribute "lastCheckin", "Date"
+//        attribute "gasUsage", "number"
+//        attribute "waterUsage", "number"
+//        attribute "powerUsage", "number"
+//        attribute "lastCheckin", "Date"
 
         command "refresh"
         command "pollEnergyInfo"
@@ -50,31 +50,31 @@ metadata {
                 attributeState("default", label:'Last Update: ${currentValue}', icon: "st.Health & Wellness.health9")
             }
         }
-        valueTile("energy", "device.energy", width: 2, height : 2, decoration: "flat") {
-            state "energy", label:'${currentValue}'
-        }
-        valueTile("energy_fare", "device.energy_fare", width: 2, height : 2, decoration: "flat") {
-            state "energy_fare", label:'${currentValue}\n원'
-        }
-
-        valueTile("gas", "device.gas", width: 2, height : 2, decoration: "flat") {
-            state "gas", label:'${currentValue}'
-        }
-        valueTile("gas_fare", "device.gas_fare", width: 2, height : 2, decoration: "flat") {
-            state "gas_fare", label:'${currentValue}\n원'
-        }
-
-        valueTile("water", "device.water", width: 2, height : 2, decoration: "flat") {
-            state "water", label:'${currentValue}'
-        }
-        valueTile("water_fare", "device.water_fare", width: 2, height : 2, decoration: "flat") {
-            state "water_fare", label:'${currentValue}\n원'
-        }
-
-        valueTile("refresh", "device.refresh", width: 2, height : 2, decoration: "flat") {
-            state "refresh", label:'REFRESH', action: 'refresh.refresh'
-        }
-
+//        valueTile("energy", "device.energy", width: 2, height : 2, decoration: "flat") {
+//            state "energy", label:'${currentValue}'
+//        }
+//        valueTile("energy_fare", "device.energy_fare", width: 2, height : 2, decoration: "flat") {
+//            state "energy_fare", label:'${currentValue}\n원'
+//        }
+//
+//        valueTile("gas", "device.gas", width: 2, height : 2, decoration: "flat") {
+//            state "gas", label:'${currentValue}'
+//        }
+//        valueTile("gas_fare", "device.gas_fare", width: 2, height : 2, decoration: "flat") {
+//            state "gas_fare", label:'${currentValue}\n원'
+//        }
+//
+//        valueTile("water", "device.water", width: 2, height : 2, decoration: "flat") {
+//            state "water", label:'${currentValue}'
+//        }
+//        valueTile("water_fare", "device.water_fare", width: 2, height : 2, decoration: "flat") {
+//            state "water_fare", label:'${currentValue}\n원'
+//        }
+//
+//        valueTile("refresh", "device.refresh", width: 2, height : 2, decoration: "flat") {
+//            state "refresh", label:'REFRESH', action: 'refresh.refresh'
+//        }
+//
         main (["view"])
     }
 }
