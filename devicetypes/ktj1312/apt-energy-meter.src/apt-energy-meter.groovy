@@ -1,6 +1,7 @@
-public static String version() { return "v0.0.1.20191214" }
+public static String version() { return "v0.0.1.20200523" }
 /*
  *	2019/12/14 >>> v0.0.1.20191109 - first version
+  *	2020/05/23 >>> v0.0.2.20200523 - add event displayed
  */
 
 metadata {
