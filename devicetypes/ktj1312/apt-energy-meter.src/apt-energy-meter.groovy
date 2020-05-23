@@ -139,8 +139,8 @@ def pollGas() {
         def usage = respMap.result[0].myhome[getMonth()]
         def fare = cal_gas_fare(energy)
 
-        sendEvent(name: "gas", value: usage)
-        sendEvent(name: "gas_fare", value: fare)
+        sendEvent(name: "gas", value: usage, displayed: true)
+        sendEvent(name: "gas_fare", value: fare, displayed: true)
 
     } catch (e) {
         log.error "failed to update $e"
@@ -160,8 +160,8 @@ def pollWater() {
         def usage = respMap.result[0].myhome[getMonth()]
         def fare = cal_water_fare(energy)
 
-        sendEvent(name: "water", value: usage)
-        sendEvent(name: "water_fare", value: fare)
+        sendEvent(name: "water", value: usage, displayed: true)
+        sendEvent(name: "water_fare", value: fare, displayed: true)
 
     } catch (e) {
         log.error "failed to update $e"
@@ -181,9 +181,9 @@ def pollEnergy() {
         def usage = respMap.result[0].myhome[getMonth()]
         def fare = cal_energy_fare(energy)
 
-        sendEvent(name: "view", value: usage)
-        sendEvent(name: "energy", value: usage)
-        sendEvent(name: "energy_fare", value: fare)
+        sendEvent(name: "view", value: usage, displayed: true)
+        sendEvent(name: "energy", value: usage, displayed: true)
+        sendEvent(name: "energy_fare", value: fare, displayed: true)
 
     } catch (e) {
         log.error "failed to update $e"
